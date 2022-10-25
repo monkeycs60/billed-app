@@ -12,3 +12,31 @@ Comment lancer le projet ?
 
 
 - Puis allez à l'adresse : http://127.0.0.1:8080/
+
+
+
+// Utilisation & fonctionnalités
+
+Comment lancer tous les tests en local avec Jest ?
+
+$ npm run test
+
+Comment lancer un seul test ?
+
+$jest src/__tests__/your_test_file.js
+
+
+Comment voir la couverture de test ?
+
+http://127.0.0.1:8080/coverage/lcov-report/
+
+Comptes et utilisateurs :
+Vous pouvez vous connecter en utilisant les comptes:
+
+administrateur => 
+utilisateur : admin@test.tld 
+mot de passe : admin
+
+employé =>
+utilisateur : employee@test.tld
+mot de passe : employee
