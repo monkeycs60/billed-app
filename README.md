@@ -15,28 +15,28 @@ Comment lancer le projet ?
 
 
 
-// Utilisation & fonctionnalités
+- Utilisation & fonctionnalités
 
 Comment lancer tous les tests en local avec Jest ?
 
-$ npm run test
+        $ npm run test
 
 Comment lancer un seul test ?
 
-$jest src/__tests__/your_test_file.js
+        $jest src/__tests__/your_test_file.js
 
 
 Comment voir la couverture de test ?
 
-http://127.0.0.1:8080/coverage/lcov-report/
+- http://127.0.0.1:8080/coverage/lcov-report/
 
 Comptes et utilisateurs :
 Vous pouvez vous connecter en utilisant les comptes:
 
 administrateur => 
-utilisateur : admin@test.tld 
-mot de passe : admin
+                utilisateur : admin@test.tld 
+                mot de passe : admin
 
 employé =>
-utilisateur : employee@test.tld
-mot de passe : employee
+                utilisateur : employee@test.tld
+                mot de passe : employee
