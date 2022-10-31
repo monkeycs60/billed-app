@@ -19,11 +19,11 @@ Comment lancer le projet ?
 
 Comment lancer tous les tests en local avec Jest ?
 
-        $ npm run test
+        $  npm run test
 
 Comment lancer un seul test ?
 
-        $jest src/__tests__/your_test_file.js
+        $  jest src/__tests__/your_test_file.js
 
 
 Comment voir la couverture de test ?
