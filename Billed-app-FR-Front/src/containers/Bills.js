@@ -34,28 +34,28 @@ export default class {
       .list()
       .then(snapshot => {
         console.log(snapshot);
-        const bills = snapshot 
-        .sort((a, b) => {
-              return new Date(b.date) - new Date(a.date);
-            })
-          .map(doc => {
+        const bills = snapshot
+          .sort((a, b) => {
+          return  (a.date < b.date ? 1 : -1)
+          })
+          .map((doc) => {
             try {
               return {
                 ...doc,
                 date: formatDate(doc.date),
                 status: formatStatus(doc.status),
               };
-            } catch(e) {
+            } catch (e) {
               // if for some reason, corrupted data was introduced, we manage here failing formatDate function
               // log the error and return unformatted date in that case
-              console.log(e,'for',doc)
+              console.log(e, "for", doc);
               return {
                 ...doc,
                 date: doc.date,
-                status: formatStatus(doc.status)
-              }
+                status: formatStatus(doc.status),
+              };
             }
-          })
+          });
           console.log('length', bills.length)
 
         return bills
