@@ -23,7 +23,7 @@ Comment lancer tous les tests en local avec Jest ?
 
 Comment lancer un seul test ?
 
-        $  jest src/__tests__/DashboardFormUI.js
+        $  jest src/__tests__/Bills.js
 
 
 Comment voir la couverture de test ?
