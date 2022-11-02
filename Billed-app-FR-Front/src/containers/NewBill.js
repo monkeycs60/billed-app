@@ -22,9 +22,14 @@ export default class NewBill {
     const fileName = filePath[filePath.length-1]
     const formData = new FormData()
     const email = JSON.parse(localStorage.getItem("user")).email
+    console.log(filePath);
     formData.append('file', file)
     formData.append('email', email)
-
+    // throw an error if the file is not a jpeg, jpg or png
+    if (!['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)) {
+      this.document.querySelector(`input[data-testid="file"]`).value = '';
+      return alert('Le fichier doit être une image au format jpeg, jpg ou png')
+    } 
     this.store
       .bills()
       .create({
@@ -65,12 +70,12 @@ export default class NewBill {
   updateBill = (bill) => {
     if (this.store) {
       this.store
-      .bills()
-      .update({data: JSON.stringify(bill), selector: this.billId})
-      .then(() => {
-        this.onNavigate(ROUTES_PATH['Bills'])
-      })
-      .catch(error => console.error(error))
-    }
+        .bills()
+        .update({ data: JSON.stringify(bill), selector: this.billId })
+        .then(() => {
+          this.onNavigate(ROUTES_PATH["Bills"]);
+        })
+        .catch((error) => console.error(error));
+    } 
   }
 }
