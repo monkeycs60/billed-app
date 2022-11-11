@@ -81,6 +81,37 @@ describe("Given I am connected as an employee", () => {
 
       });
     });
+    describe("When I am on Bills Page and I click on the new bill button", () => {
+      test("A new bill page should be opened", () => {
+        Object.defineProperty(window, "localStorage", {
+          value: localStorageMock,
+        });
+        window.localStorage.setItem(
+          "user",
+          JSON.stringify({
+            type: "Employee",
+          })
+        );
+        document.body.innerHTML = BillsUI({ data: bills });
+        const onNavigate = (pathname) => {
+          document.body.innerHTML = ROUTES({ pathname });
+        };
+        const store = null;
+        const mockBills = new Bills({
+          document,
+          onNavigate,
+          store,
+          localStorage: localStorageMock,
+        });
+        //simulation du clic sur le bouton new bill
+        const handleClickNewBill = jest.fn(() => {mockBills.handleClickNewBill;});
+        const newBillBtn = screen.getByTestId("btn-new-bill");
+        newBillBtn.addEventListener("click", handleClickNewBill);
+        fireEvent.click(newBillBtn);
+        expect(handleClickNewBill).toHaveBeenCalled();
+        expect(screen.getAllByText("Envoyer une note de frais")).toBeTruthy();
+      });
+    });
 
 })
 
