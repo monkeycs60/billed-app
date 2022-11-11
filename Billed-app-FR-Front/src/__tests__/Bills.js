@@ -2,13 +2,16 @@
  * @jest-environment jsdom
  */
 
-import {screen, waitFor} from "@testing-library/dom"
+import { fireEvent, screen, waitFor } from "@testing-library/dom";
 import BillsUI from "../views/BillsUI.js"
 import { bills } from "../fixtures/bills.js"
-import { ROUTES_PATH} from "../constants/routes.js";
+import Bills from "../containers/Bills.js";
+import { ROUTES, ROUTES_PATH} from "../constants/routes.js";
 import {localStorageMock} from "../__mocks__/localStorage.js";
+import mockStore from "../__mocks__/localStorage.js";
 
 import router from "../app/Router.js";
+
 
 describe("Given I am connected as an employee", () => {
   describe("When I am on Bills Page", () => {
@@ -44,4 +47,40 @@ describe("Given I am connected as an employee", () => {
       expect(dates).toEqual(datesSorted)
     })
   })
+    describe("When I am on Bills Page and I click on the icon eye", () => {
+      test("A modal should open", () => {
+        Object.defineProperty(window, "localStorage", {
+          value: localStorageMock,
+        });
+        window.localStorage.setItem(
+          "user",
+          JSON.stringify({
+            type: "Employee",
+          })
+        );
+        document.body.innerHTML = BillsUI({ data: bills });
+        const onNavigate = (pathname) => {
+          document.body.innerHTML = ROUTES({ pathname });
+        };
+        const store = null;
+        const billContainer = new Bills({
+          document,
+          onNavigate,
+          store,
+          localStorage: localStorageMock,
+        });
+        //simulation de l'ouverture de la modal
+        $.fn.modal = jest.fn();
+        //simulation du clic sur l'icone oeil
+        const handleClickIconEye = jest.fn(() => {billContainer.handleClickIconEye});
+        const iconEye = screen.getAllByTestId("icon-eye")[0];
+        iconEye.addEventListener("click", handleClickIconEye);
+        fireEvent.click(iconEye);
+        expect(handleClickIconEye).toHaveBeenCalled();
+        expect($.fn.modal).toHaveBeenCalled();
+
+      });
+    });
+
 })
+
