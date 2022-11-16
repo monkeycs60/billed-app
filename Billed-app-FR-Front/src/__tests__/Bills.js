@@ -176,7 +176,6 @@ describe("Given I am a user connected as Employee", () => {
         expect(tbody.children.length).toBe(4);
 
     });
-    //describe when an error occurs on API
     describe("When an error occurs on API", () => {
         beforeEach(() => {
           jest.spyOn(mockStore, "bills")
@@ -194,7 +193,7 @@ describe("Given I am a user connected as Employee", () => {
       document.body.appendChild(root)
       router()
     })
-
+// ERROR 404
     test("fetches bills from an API and fails with 404 message error", async () => {
      mockStore.bills.mockImplementationOnce(() => {
        return {
@@ -208,6 +207,7 @@ describe("Given I am a user connected as Employee", () => {
      const message = await screen.getByText(/Erreur 404/);
      expect(message).toBeTruthy();
     });
+// ERROR 500
     test("fetches messages from an API and fails with 500 message error", async () => {
       mockStore.bills.mockImplementationOnce(() => {
         return {
