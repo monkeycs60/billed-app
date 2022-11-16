@@ -10,7 +10,7 @@ import { localStorageMock } from "../__mocks__/localStorage";
 import { ROUTES, ROUTES_PATH } from "../constants/routes";
 import NewBillUI from "../views/NewBillUI";
 import NewBill from "../containers/NewBill";
-import Router from "../app/Router";
+import router from "../app/Router";
 
 jest.mock("../app/store", () => mockStore);
 
@@ -42,17 +42,79 @@ describe("Given I am connected as an employee", () => {
     test("Then bill icon in vertical layout should be highlighted", async () => {
       await setup();
       // Surfing on newbill page
-     window.onNavigate(ROUTES_PATH.NewBill);
+      window.onNavigate(ROUTES_PATH.NewBill);
 
       // TEST 1: L'icone a gauche a un background plus clair
-      const icon = screen.getByTestId("icon-window");
-      expect(icon).toHaveStyle("background-color: #3b4752");
+      const icon = screen.getByTestId("icon-mail");
+
+      // Get the tested icon
+      await waitFor(() => screen.getByTestId("icon-mail"));
+      const mailIcon = screen.getByTestId("icon-mail");
+      
+      // Check that the icon has the highlighted class given by active-icon
+      expect(mailIcon).toBeTruthy();
+      expect(mailIcon.classList).toContain("active-icon");
     });
-    
-    test("Then ...", () => {
-      const html = NewBillUI()
-      document.body.innerHTML = html
-      //to-do write assertion
+
+    describe("When I upload a file with a wrong image format", () => {
+      test("Then the file input should be emptied", async () => {
+        Object.defineProperty(window, "localStorage", {
+          value: localStorageMock,
+        });
+        window.localStorage.setItem(
+          "user",
+          JSON.stringify({
+            type: "Employee",
+          })
+        );
+        document.body.innerHTML = NewBillUI();
+       
+          const newBill = new NewBill({
+            document,
+            onNavigate,
+            store: mockStore, localStorage
+          });
+        // Surfing on newbill page
+        // window.onNavigate(ROUTES_PATH.NewBill);
+
+        const handleChangeFile = jest.fn((e) => {
+          newBill.handleChangeFile(e);
+        });
+        // Get the file input
+        const fileInput = screen.getByTestId("file");
+       
+        //get the file to upload, it should be a pdf file
+        const fileToUpload = new File(["chucknorris"], "chucknorris.pdf", {
+          type: "application/pdf",
+        });
+
+        // listener on file input
+        fileInput.addEventListener("change", handleChangeFile);
+        // Simulate the change event
+        // await waitFor(() => {
+        //   fireEvent.change(fileInput, {
+        //     target: {
+        //       files: [fileToUpload],
+        //     },
+        //   });
+        // });
+
+        
+
+        // Check that the file input is empty
+        // expect(fileInput.files.length).toBe(0);
+        // Upload the file
+       userEvent.upload(fileInput, fileToUpload);
+       expect(handleChangeFile).toHaveBeenCalled();
+        // expect(fileInput.files.length).toBe(0);
+          // expect(fileInput.files[0]).not.toStrictEqual(fileInput);
+          expect(fileInput.files[0].name).not.toBe("chucknorris.pdf");
+        // Check if the fileInput does not contains fileToUpload name
+        // expect(fileInput.files[0].name).not.toBe(fileToUpload.name);
+      
+        
+      });
     })
-  })
 })
+})
+
