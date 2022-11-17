@@ -28,6 +28,7 @@ export default class NewBill {
     // throw an error if the file is not a jpeg, jpg or png
     if (!['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)) {
       this.document.querySelector(`input[data-testid="file"]`).value = '';
+      this.document.querySelector(`input[data-testid="file"]`).classList.add('errorPopup');
       return alert('Le fichier doit être une image au format jpeg, jpg ou png')
     } 
     this.store
