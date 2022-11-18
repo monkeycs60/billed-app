@@ -11,6 +11,7 @@ import { ROUTES, ROUTES_PATH } from "../constants/routes";
 import NewBillUI from "../views/NewBillUI";
 import NewBill from "../containers/NewBill";
 import router from "../app/Router";
+import BillsUI from "../views/BillsUI.js";
 
 
 jest.mock("../app/store", () => mockStore);
@@ -103,6 +104,7 @@ describe("Given I am connected as an employee", () => {
      
       });
     });
+    //Test d'intégration POST
     describe("When I fill the form with correct datas and file extension", () => {
       test("Then the new bill should be created", async () => {
         Object.defineProperty(window, "localStorage", {
@@ -116,12 +118,17 @@ describe("Given I am connected as an employee", () => {
         );
         document.body.innerHTML = NewBillUI();
 
+        // We have to mock navigation to test it
+        const onNavigate = (pathname) => {
+          document.body.innerHTML = ROUTES({ pathname });
+        };
+
         const newBill = new NewBill({
           document,
           onNavigate,
           store: mockStore,
           localStorage,
-        });   
+        });
 
         // Get the form
         const form = screen.getByTestId("form-new-bill");
@@ -144,95 +151,102 @@ describe("Given I am connected as an employee", () => {
         fireEvent.change(inputPct, { target: { value: "80" } });
         fireEvent.change(inputComment, { target: { value: "test" } });
 
-        
-        
         //expect all the fields to be valid
-        expect(inputType.validity.valid).toBeTruthy()
-        expect(inputName.validity.valid).toBeTruthy()
-        expect(inputDate.validity.valid).toBeTruthy()
-        expect(inputAmount.validity.valid).toBeTruthy()
-        expect(inputVat.validity.valid).toBeTruthy()
-        expect(inputPct.validity.valid).toBeTruthy()
-        expect(inputComment.validity.valid).toBeTruthy()
-        
+        expect(inputType.validity.valid).toBeTruthy();
+        expect(inputName.validity.valid).toBeTruthy();
+        expect(inputDate.validity.valid).toBeTruthy();
+        expect(inputAmount.validity.valid).toBeTruthy();
+        expect(inputVat.validity.valid).toBeTruthy();
+        expect(inputPct.validity.valid).toBeTruthy();
+        expect(inputComment.validity.valid).toBeTruthy();
+
         // Get the file input
         const handleChangeFile = jest.fn((e) => {
           newBill.handleChangeFile(e);
         });
         // Get the file input
         const fileInput = screen.getByTestId("file");
-        
+
         //get the file to upload, it should be a pdf file
         const fileToUpload = new File(["chucknorris"], "chucknorris.png", {
           type: "image/png",
         });
-        
+
         // listener on file input
         fileInput.addEventListener("change", handleChangeFile);
-        
+
         // Upload the file
         userEvent.upload(fileInput, fileToUpload);
-        
+
         // check that the file has been uploaded
         expect(handleChangeFile).toHaveBeenCalled();
         expect(fileInput.files[0]).toBeDefined();
 
         newBill.updateBill = jest.fn();
-        
+
         // Submit the form
         const handleSubmit = jest.fn((e) => {
           newBill.handleSubmit(e);
         });
         form.addEventListener("submit", handleSubmit);
-        
+
         fireEvent.submit(form);
-        
+
         // check that the form has been submitted and the new bill created
         expect(handleSubmit).toHaveBeenCalled();
         expect(newBill.updateBill).toHaveBeenCalled();
 
-        // check that the user is redirected to the bills page by checking the highlighted icon
-        const billsIcon = screen.getByTestId("icon-window");
-        expect(billsIcon.classList).toContain("active-icon");
+      });
+ 
+    });
+
+    // Lorsqu'une erreur se produit sur l'API
+    describe("When an error occurs on API", () => {
+      beforeEach(() => {
+        jest.spyOn(mockStore, "bills");
+        Object.defineProperty(window, "localStorage", {
+          value: localStorageMock,
+        });
+        localStorage.setItem(
+          "user",
+          JSON.stringify({ type: "Employee", email: "a@a" })
+        );
+        const root = document.createElement("div");
+        root.setAttribute("id", "root");
+        document.body.appendChild(root);
+        router();
+      });
+
+      // TEST : récupère les factures d'une API et échoue avec une erreur 404
+      test("fetches bills from an API and fails with 404 message error", async () => {
+        mockStore.bills.mockImplementationOnce(() => {
+          return {
+            list: () => {
+              return Promise.reject(new Error("Erreur 404"));
+            },
+          };
+        });
+        const html = BillsUI({ error: "Erreur 404" });
+        document.body.innerHTML = html;
+        const message = await screen.getByText(/Erreur 404/);
+        expect(message).toBeTruthy();
+      });
+
+      // TEST : récupère les factures d'une API et échoue avec une erreur 500
+      test("fetches messages from an API and fails with 500 message error", async () => {
+        mockStore.bills.mockImplementationOnce(() => {
+          return {
+            list: () => {
+              return Promise.reject(new Error("Erreur 500"));
+            },
+          };
+        });
+
+        const html = BillsUI({ error: "Erreur 500" });
+        document.body.innerHTML = html;
+        const message = await screen.getByText(/Erreur 500/);
+        expect(message).toBeTruthy();
       });
     });
-    //POST ERROR TEST
-//     describe("When an error occurs on API", () => {
-//         test("Then it should display an error message", async () => {
-        
-//         console.error = jest.fn();
-
-//         window.onNavigate(ROUTES_PATH.NewBill);
-
-//        // find the promise that is rejected
-//         const postSpy = jest.spyOn(localStorageMock, "post");
-//         postSpy.mockImplementationOnce(() => Promise.reject(new Error("Erreur 400")));
-
-
-//         document.body.innerHTML = NewBillUI();
-
-//         const newBill = new NewBill({
-//           document,
-//           onNavigate,
-//           store: mockStore,
-//           localStorage,
-//         });
-
-//         const form = screen.getByTestId("form-new-bill");
-
-//         const handleSubmit = jest.fn((e) => {
-//           newBill.handleSubmit(e);
-//         });
-//         form.addEventListener("submit", handleSubmit);
-
-//         fireEvent.submit(form);
-
-//         expect(handleSubmit).toHaveBeenCalled();
-//         expect(console.error).toHaveBeenCalled();
-
-//         // expect(screen.getByText("Erreur 404")).toBeTruthy();
-
-//   })
-// })
   });
 });
