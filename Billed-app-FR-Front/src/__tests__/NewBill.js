@@ -103,6 +103,41 @@ describe("Given I am connected as an employee", () => {
         );
      
       });
+      //describe when i enter a correct file format, the name of the file should be displayed
+          describe("When I select an image in a correct format", () => {
+            test("Then the input file should display the file name", () => {
+              //page NewBill
+              const html = NewBillUI();
+              document.body.innerHTML = html;
+              const onNavigate = (pathname) => {
+                document.body.innerHTML = ROUTES({ pathname });
+              };
+              // initialisation NewBill
+              const newBill = new NewBill({
+                document,
+                onNavigate,
+                store : mockStore,
+                localStorage,
+              });
+              const handleChangeFile = jest.fn((e) =>
+                newBill.handleChangeFile(e)
+              );
+              const input = screen.getByTestId("file");
+              input.addEventListener("change", handleChangeFile);
+              //fichier au bon format
+              fireEvent.change(input, {
+                target: {
+                  files: [
+                    new File(["image.png"], "image.png", {
+                      type: "image/png",
+                    }),
+                  ],
+                },
+              });
+              expect(handleChangeFile).toHaveBeenCalled();
+              expect(input.files[0].name).toBe("image.png");
+            });
+          });
     });
     //Test d'intégration POST
     describe("When I fill the form with correct datas and file extension", () => {
