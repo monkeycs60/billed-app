@@ -2,17 +2,6 @@
  * @jest-environment jsdom
  */
 
-// import { fireEvent, screen, waitFor, userEvent } from "@testing-library/dom";
-// import BillsUI from "../views/BillsUI.js";
-// import { bills } from "../fixtures/bills.js";
-// import { row } from "../views/BillsUI.js";
-// import Bills from "../containers/Bills.js";
-// import { ROUTES, ROUTES_PATH } from "../constants/routes.js";
-// import { localStorageMock } from "../__mocks__/localStorage.js";
-// import mockStore from "../__mocks__/store.js";
-// import router from "../app/Router.js";
-
-
 import "@testing-library/jest-dom";
 import store from "../__mocks__/store";
 import userEvent from "@testing-library/user-event";
@@ -24,7 +13,6 @@ import { bills } from "../fixtures/bills.js";
 import mockStore from "../__mocks__/store";
 import { ROUTES, ROUTES_PATH } from "../constants/routes.js";
 import { localStorageMock } from "../__mocks__/localStorage.js";
-import { row } from "../views/BillsUI.js";
 
 
 jest.mock("../app/store", () => mockStore);
@@ -57,8 +45,6 @@ describe("Given I am connected as an employee", () => {
     test("Then bill icon in vertical layout should be highlighted", async () => {
       await setup();
      
-      // TEST 1: L'icone a gauche a un background plus clair
-
       // Surfing on Bills page
       window.onNavigate(ROUTES_PATH.Bills);
 
@@ -104,15 +90,14 @@ describe("Given I am connected as an employee", () => {
         store,
         localStorage: localStorageMock,
       });
-      //simulation de l'ouverture de la modal
+      //simulate modal opening
       $.fn.modal = jest.fn();
-      //simulation du clic sur l'icone oeil
       const handleClickIconEye = jest.fn(() => {
         billContainer.handleClickIconEye;
       });
-      // const modaleFile = document.getElementById("modaleFile");
       const iconEye = screen.getAllByTestId("icon-eye")[0];
       iconEye.addEventListener("click", handleClickIconEye);
+      //simulate click on eye icon
       userEvent.click(iconEye);
       expect(handleClickIconEye).toHaveBeenCalled();
       expect($.fn.modal).toHaveBeenCalled();
@@ -140,7 +125,7 @@ describe("Given I am connected as an employee", () => {
         store,
         localStorage: localStorageMock,
       });
-      //simulation du clic sur le bouton new bill
+      //simulate click on new bill button
       const handleClickNewBill = jest.fn(() => {
         mockBills.handleClickNewBill;
       });
@@ -153,7 +138,7 @@ describe("Given I am connected as an employee", () => {
   });
 })
 
-// test d'intégration GET
+// integration test GET
 describe("Given I am a user connected as Employee", () => {
   describe("When I am Bills Page", () => {
     test("fetches bills from mock API GET", async () => {

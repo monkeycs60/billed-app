@@ -103,7 +103,7 @@ describe("Given I am connected as an employee", () => {
         );
      
       });
-      //describe when i enter a correct file format, the name of the file should be displayed
+      //describe when I enter a correct file format, the name of the file should be displayed
           describe("When I select an image in a correct format", () => {
             test("Then the input file should display the file name", () => {
               //page NewBill
@@ -112,7 +112,7 @@ describe("Given I am connected as an employee", () => {
               const onNavigate = (pathname) => {
                 document.body.innerHTML = ROUTES({ pathname });
               };
-              // initialisation NewBill
+              // init NewBill
               const newBill = new NewBill({
                 document,
                 onNavigate,
@@ -124,7 +124,7 @@ describe("Given I am connected as an employee", () => {
               );
               const input = screen.getByTestId("file");
               input.addEventListener("change", handleChangeFile);
-              //fichier au bon format
+              //file with the correct format/extensions
               fireEvent.change(input, {
                 target: {
                   files: [
@@ -139,7 +139,7 @@ describe("Given I am connected as an employee", () => {
             });
           });
     });
-    //Test d'intégration POST
+    //Integration test for the POST request
     describe("When I fill the form with correct datas and file extension", () => {
       test("Then the new bill should be created", async () => {
         Object.defineProperty(window, "localStorage", {
@@ -235,7 +235,7 @@ describe("Given I am connected as an employee", () => {
  
     });
 
-    // Lorsqu'une erreur se produit sur l'API
+    // When an error occurs on the API
     describe("When an error occurs on API", () => {
       beforeEach(() => {
         jest.spyOn(mockStore, "bills");
@@ -251,8 +251,7 @@ describe("Given I am connected as an employee", () => {
         document.body.appendChild(root);
         router();
       });
-
-      // TEST : récupère les factures d'une API et échoue avec une erreur 404
+      // TEST : get bills from an API and fails with 404 error
       test("fetches bills from an API and fails with 404 message error", async () => {
         mockStore.bills.mockImplementationOnce(() => {
           return {
@@ -266,8 +265,7 @@ describe("Given I am connected as an employee", () => {
         const message = await screen.getByText(/Erreur 404/);
         expect(message).toBeTruthy();
       });
-
-      // TEST : récupère les factures d'une API et échoue avec une erreur 500
+      // TEST : get bills from an API and fails with 500 error
       test("fetches messages from an API and fails with 500 message error", async () => {
         mockStore.bills.mockImplementationOnce(() => {
           return {
