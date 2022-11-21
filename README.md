@@ -1,6 +1,6 @@
- # Title: Billed App
+ #Titre : __Billed App__
 
-Lien vers l'application : [./Billed-app-FR-Front/index.html]
+Lien vers l'application [Billed-App](./Billed-app-FR-Front/index.html)
 
 
 Comment lancer le projet ?
