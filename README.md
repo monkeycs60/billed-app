@@ -1,7 +1,7 @@
  # Titre 
 __Billed App__
 
-Lien vers l'application [Billed-App](./Billed-app-FR-Front/index.html)
+Lien vers l'application [Billed-App](https://monkeycs60.github.io/billed-app/Billed-app-FR-Front/index.html)
 
 ## Description
 Solution RH dont le but est de gérer les notes de frais des employés d'une entreprise.
