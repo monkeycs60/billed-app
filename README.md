@@ -13,12 +13,15 @@ Allez au repo cloné :
 1)      $ cd Billed-app-FR-Front
 
 Installez les packages npm (décrits dans package.json) :
+
 2)      $ npm install
 
 Installez live-server pour lancer un serveur local :
+
 3)      $ npm install -g live-server
 
 Lancez l'application :
+
 4)      $ live-server
 
 
