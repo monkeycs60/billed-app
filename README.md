@@ -1,8 +1,14 @@
- #Titre : __Billed App__
+ # Titre 
+__Billed App__
 
 Lien vers l'application [Billed-App](./Billed-app-FR-Front/index.html)
 
-Test
+## Description
+Solution RH dont le but est de gérer les notes de frais des employés d'une entreprise.
+Le but est de permettre à l'employé de saisir ses notes de frais et de les envoyer à son manager pour validation.
+Le manager pourra ensuite valider ou non les notes de frais de son employé.
+
+L'objectif de ce projet est de prendre en main les tests unitaires et les tests d'intégration avec Jest.
 
 Comment lancer le projet ?
 
